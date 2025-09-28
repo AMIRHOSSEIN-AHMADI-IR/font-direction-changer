@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Basic metadata -->
+    <meta charset="UTF-8" />
+    <title data-i18n-key="settingsPageTitle">Extension Settings</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="settings.css" />
+
+    <!--
+      Google Fonts Import
+      Pre-loading a curated list of fonts used by the extension.
+      This allows the font selection dropdowns to render previews correctly.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Cairo:wght@200..1000&family=Crimson+Text:wght@400;600;700&family=Gulzar&family=Inter:wght@100..900&family=Josefin+Sans:wght@100..700&family=Lalezar&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans:wght@100..900&family=Nunito:wght@200..1000&family=Open+Sans:wght@300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playpen+Sans:wght@100..800&family=Roboto+Mono:wght@100..700&family=Roboto+Slab:wght@100..900&family=Roboto:wght@100;300;400;500;700;900&family=Rubik:wght@300..900&family=Vazirmatn:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Main container for the settings page layout -->
+    <main class="container">
+      <!-- Page Header -->
+      <header class="page-header">
+        <h1 data-i18n-key="extensionSettingsLabel">
+          <!-- Populated by i18n-manager.js -->
+        </h1>
+      </header>
+
+      <!-- Card 1: General Settings (Language, Theme, UI Font) -->
+      <section class="card">
+        <div class="card-body">
+          <!-- Language Selection -->
+          <div class="setting-group">
+            <label class="group-label" data-i18n-key="languageSettingsLabel"
+              ><!-- Populated by i18n --></label
+            >
+            <div class="custom-select-wrapper">
+              <div id="customLanguageSelect" class="custom-select">
+                <div class="select-selected">
+                  <!-- The currently selected language will be shown here by JavaScript -->
+                </div>
+                <div class="select-items">
+                  <!-- Language options with flags -->
+                  <div data-value="en">
+                    <img
+                      src="icons/flags/us.svg"
+                      alt="USA Flag"
+                      class="flag-icon"
+                    />
+                    <span>English</span>
+                  </div>
+                  <div data-value="fa">
+                    <img
+                      src="icons/flags/ir.svg"
+                      alt="Iran Flag"
+                      class="flag-icon"
+                    />
+                    <span>پارسی | Persian</span>
+                  </div>
+                  <div data-value="ar">
+                    <img
+                      src="icons/flags/sa.svg"
+                      alt="Saudi Arabia Flag"
+                      class="flag-icon"
+                    />
+                    <span>العربية | Arabic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Selection -->
+          <div class="setting-group">
+            <label class="group-label" data-i18n-key="themeSettingsLabel"
+              ><!-- Populated by i18n --></label
+            >
+            <div id="themeSelector" class="segmented-control">
+              <div class="segmented-indicator">
+                <!-- This element moves to highlight the active theme -->
+              </div>
+              <button
+                type="button"
+                class="segmented-btn"
+                data-value="light"
+                data-i18n-key="lightThemeLabel"
+              ></button>
+              <button
+                type="button"
+                class="segmented-btn"
+                data-value="system"
+                data-i18n-key="systemThemeLabel"
+              ></button>
+              <button
+                type="button"
+                class="segmented-btn"
+                data-value="dark"
+                data-i18n-key="darkThemeLabel"
+              ></button>
+            </div>
+          </div>
+
+          <!-- UI Font Selection -->
+          <div class="setting-group">
+            <label
+              for="uiFontSelect"
+              class="group-label"
+              data-i18n-key="uiFontSettingsLabel"
+              ><!-- Populated by i18n --></label
+            >
+            <!-- The new custom font dropdown structure -->
+            <div class="custom-select-wrapper">
+              <div id="customUiFontSelect" class="custom-select">
+                <div class="select-selected">
+                  <!-- The selected UI font will be shown here by JavaScript -->
+                </div>
+                <div class="select-items">
+                  <!-- Font options are populated dynamically by settings.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Card 2: List of Configured Sites -->
+      <section class="card">
+        <header class="card-header">
+          <h2 class="group-label" data-i18n-key="modifiedSitesLabel">
+            <!-- Populated by i18n -->
+          </h2>
+        </header>
+        <div class="card-body">
+          <!-- Search bar to filter the sites list -->
+          <div class="search-bar-container">
+            <input
+              type="text"
+              id="siteSearchInput"
+              aria-controls="sitesList"
+              data-i18n-placeholder-key="searchSitePlaceholder"
+            />
+            <button
+              type="button"
+              id="clearSearchButton"
+              data-i18n-title-key="clearSearchButtonTitle"
+            ></button>
+          </div>
+          <!-- Container where the list of sites will be dynamically generated by settings.js -->
+          <div id="sitesList" class="sites-list" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- Card 3: Data Management (Backup, Restore, Reset) -->
+      <section class="card">
+        <header class="card-header">
+          <h2 class="group-label" data-i18n-key="backupRestoreLabel">
+            <!-- Populated by i18n -->
+          </h2>
+        </header>
+        <div class="card-body">
+          <!-- Export and Import buttons -->
+          <div class="action-buttons-group">
+            <button id="exportSettingsButton" class="btn btn-secondary">
+              <span data-i18n-key="exportButtonLabel"></span>
+            </button>
+            <button id="importSettingsButton" class="btn btn-secondary">
+              <span data-i18n-key="importButtonLabel"></span>
+            </button>
+            <!-- Hidden file input triggered by the import button -->
+            <input
+              type="file"
+              id="importFile"
+              accept=".json"
+              style="display: none"
+            />
+          </div>
+          <!-- Status message area for import/export feedback -->
+          <p id="importStatusMessage" class="status-message"></p>
+
+          <!-- Danger Zone for destructive actions -->
+          <div class="danger-zone">
+            <label
+              class="group-label"
+              data-i18n-key="resetAllSettingsSectionLabel"
+              ><!-- Populated by i18n --></label
+            >
+            <button
+              id="resetAllSettingsButton"
+              class="btn btn-danger"
+              data-i18n-key="resetAllSettingsButtonLabel"
+            ></button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Floating scroll-to-top/bottom buttons -->
+    <div class="scroll-buttons-container">
+      <button
+        type="button"
+        id="scrollDownBtn"
+        class="scroll-btn"
+        aria-label="Scroll Down"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 -960 960 960"
+          width="18px"
+        >
+          <path
+            d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z"
+          />
+        </svg>
+      </button>
+      <button
+        type="button"
+        id="scrollUpBtn"
+        class="scroll-btn"
+        aria-label="Scroll Up"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="18px"
+          viewBox="0 -960 960 960"
+          width="18px"
+        >
+          <path
+            d="M480-528 324-372q-11 11-28 11t-28-11q-11-11-11-28t11-28l184-184q12-12 28-12t28 12l184 184q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-528Z"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- JavaScript files loaded at the end of the body for faster page rendering -->
+    <script src="i18n-manager.js"></script>
+    <script src="fonts-config.js"></script>
+    <script src="settings.js"></script>
+  </body>
+</html>

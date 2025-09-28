@@ -1,0 +1,96 @@
+/**
+ * @file popup.css
+ * @description This file contains specific styles for the main extension popup (popup.html).
+ */
+
+/*
+ * UPDATED: Set the body height to auto.
+ * This ensures the popup window resizes vertically to fit its content,
+ * effectively removing the scrollbar if the content grows.
+ */
+body {
+  height: auto;
+}
+
+/*
+ * Ensures the font selectors themselves use the default UI font initially.
+ */
+select#fontSelect,
+select#fontWeightSelect {
+  font-family: var(--ui-font);
+}
+
+/*
+ * Styles the individual <option> elements within the font and weight dropdowns.
+ */
+select#fontSelect option,
+select#fontWeightSelect option {
+  direction: rtl;
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+/*
+ * Specifically targets the default "Browser Default" option.
+ */
+select#fontWeightSelect option[value=""] {
+  font-family: var(--ui-font);
+}
+
+/*
+ * General styling for labels associated with number inputs.
+ */
+label.input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  margin-bottom: 8px;
+}
+
+/*
+ * General disabled state for <select> elements in the popup.
+ */
+select:disabled {
+  background-color: var(--subtle-background-color) !important;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Dark theme override for the disabled state. */
+body.dark-theme select:disabled {
+  background-color: var(--dark-subtle-background-color) !important;
+  opacity: 0.6;
+}
+
+/* =============================================
+   Content Security Policy (CSP) Warning Message
+   ============================================= */
+.warning-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: var(--radius-inner);
+  background-color: #fffbe6;
+  color: #926c09;
+  font-size: 12px;
+  line-height: 1.5;
+  border: 1px solid #ffe58f;
+}
+
+.warning-message svg {
+  fill: #926c09;
+  flex-shrink: 0;
+}
+
+body.dark-theme .warning-message {
+  background-color: #4d442a;
+  color: #ffe58f;
+  border-color: #a78d48;
+}
+
+body.dark-theme .warning-message svg {
+  fill: #ffe58f;
+}

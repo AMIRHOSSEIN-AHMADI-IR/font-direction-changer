@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title data-i18n-key="popupTitle"></title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="popup.css" />
+    <!-- Updated Google Fonts link with the new curated list -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Cairo:wght@200..1000&family=Crimson+Text:wght@400;600;700&family=Gulzar&family=Inter:wght@100..900&family=Josefin+Sans:wght@100..700&family=Lalezar&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans:wght@100..900&family=Nunito:wght@200..1000&family=Open+Sans:wght@300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playpen+Sans:wght@100..800&family=Roboto+Mono:wght@100..700&family=Roboto+Slab:wght@100..900&family=Roboto:wght@100;300;400;500;700;900&family=Rubik:wght@300..900&family=Vazirmatn:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <button
+      id="settingsButton"
+      data-i18n-key="settingsButtonTitle"
+      data-i18n-target="title"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <path
+          d="M409-58.67q-18 0-31.95-11.71-13.96-11.71-16.72-29.95l-13.33-90q-13-5.34-28.45-14.12-15.44-8.79-27.55-17.88l-83.67 37q-17.66 8.33-35.66 2-18-6.34-27-22.67L74.33-333.33q-9-15.67-5.66-33 3.33-17.34 19-28.67l74-56.33q-.67-6.26-1-15.17-.34-8.91-.34-15.83 0-6.41.34-14.5.33-8.1 1-15.17L88-566.33q-15-11.34-18.67-28.84-3.66-17.5 6-33.83l70.34-125.67q9-15.66 26.5-21.5 17.5-5.83 35.16.84l81 36.33q12-9 28.5-18.33 16.5-9.34 30.5-15l13-89.34q2.34-18 16.5-29.5 14.17-11.5 32.17-11.5h142q18 0 32.17 11.5 14.16 11.5 16.5 29.5l13 89.67q14 5.67 30.83 15t28.17 18.33l80.66-36.66q17.39-7.67 34.78-1.34 17.38 6.34 27.22 22l71 125.67q9 16.33 5.34 34.17Q887-577 872-566.33L797-512q.67 7.33 1.33 16.33.67 9 .67 15.67t-.67 15.33q-.66 8.67-.66 15.34L871.33-395q15 10.67 18.84 28.5 3.83 17.83-5.17 34.17L814.67-206q-9 16.33-27 22.67-18 6.33-36-2l-83-37q-11.67 8.66-26.84 17.83-15.16 9.17-28.16 13.83l-14 90.34q-2.76 18.24-16.72 29.95Q569-58.67 551-58.67H409Zm28-84h85.18l14.15-111q33.34-8 62.58-24.75 29.25-16.75 53.76-40.91l102.33 44L795-346l-90-67.67q4.33-16 7.17-33.06 2.83-17.06 2.83-34.33 0-17.94-2.33-34.11-2.34-16.16-6.67-33.83l89-66.33L756.33-686 653-642.67q-22.67-25.33-52.06-42.96-29.39-17.63-64.61-24.04l-12.66-109h-87.34L423.67-710q-35.67 8.33-65.5 25.67-29.84 17.33-52.5 41.66L204.33-686l-40.66 70.67L253.33-548q-4.33 18.33-6.66 34.33-2.34 16-2.34 31.76 0 15.58 2.34 32.24 2.33 16.67 6.66 36.34L163.67-346l40.66 70.67 102.34-44.34q26 25.67 55.33 42.34 29.33 16.66 61.67 24.66l13.33 110Zm42-186.66q62.93 0 107.47-44.54Q631-418.4 631-481.33q0-62.94-44.53-107.47-44.54-44.53-107.47-44.53-63.33 0-107.67 44.53Q327-544.27 327-481.33q0 62.93 44.33 107.46 44.34 44.54 107.67 44.54Zm.67-151.67Z"
+        />
+      </svg>
+    </button>
+    <button
+      id="resetButton"
+      data-i18n-key="resetButtonTitle"
+      data-i18n-target="title"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <path
+          d="M440-122q-121-15-200.5-105.5T160-440q0-66 25-126.5T260-678l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"
+        />
+      </svg>
+    </button>
+
+    <div id="cspWarningMessage" class="warning-message" style="display: none">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="20px"
+        viewBox="0 -960 960 960"
+        width="20px"
+      >
+        <path
+          d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+        />
+      </svg>
+      <span data-i18n-key="cspWarningText"></span>
+    </div>
+
+    <div class="setting-group">
+      <label
+        for="fontSelect"
+        class="select-label"
+        data-i18n-key="fontSelectLabel"
+      ></label>
+      <select id="fontSelect"></select>
+    </div>
+    <div class="setting-group">
+      <label
+        for="fontWeightSelect"
+        class="select-label"
+        data-i18n-key="fontWeightLabel"
+      ></label>
+      <select id="fontWeightSelect" disabled></select>
+    </div>
+    <div class="setting-group">
+      <label
+        for="fontSizeInput"
+        class="input-label"
+        data-i18n-key="fontSizeLabel"
+      ></label>
+      <div class="custom-number-input">
+        <input
+          type="text"
+          id="fontSizeInput"
+          class="numeric-input-field"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          data-i18n-placeholder-key="fontSizePlaceholder"
+        />
+        <div class="stepper-buttons">
+          <button
+            type="button"
+            class="stepper-btn stepper-up"
+            data-target="fontSizeInput"
+            data-step="1"
+            data-i18n-aria-label-key="increaseFontSizeAria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 -960 960 960"
+              width="18px"
+            >
+              <path
+                d="M480-528 324-372q-11 11-28 11t-28-11q-11-11-11-28t11-28l184-184q12-12 28-12t28 12l184 184q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-528Z"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="stepper-btn stepper-down"
+            data-target="fontSizeInput"
+            data-step="1"
+            data-i18n-aria-label-key="decreaseFontSizeAria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 -960 960 960"
+              width="18px"
+            >
+              <path
+                d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="setting-group">
+      <label
+        for="lineHeightInput"
+        class="input-label"
+        data-i18n-key="lineHeightLabel"
+      ></label>
+      <div class="custom-number-input">
+        <input
+          type="text"
+          id="lineHeightInput"
+          class="numeric-input-field"
+          inputmode="numeric"
+          pattern="[0-9]*\.?[0-9]+"
+          data-i18n-placeholder-key="lineHeightPlaceholder"
+        />
+        <div class="stepper-buttons">
+          <button
+            type="button"
+            class="stepper-btn stepper-up"
+            data-target="lineHeightInput"
+            data-step="0.1"
+            data-i18n-aria-label-key="increaseLineHeightAria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 -960 960 960"
+              width="18px"
+            >
+              <path
+                d="M480-528 324-372q-11 11-28 11t-28-11q-11-11-11-28t11-28l184-184q12-12 28-12t28 12l184 184q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-528Z"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="stepper-btn stepper-down"
+            data-target="lineHeightInput"
+            data-step="0.1"
+            data-i18n-aria-label-key="decreaseLineHeightAria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 -960 960 960"
+              width="18px"
+            >
+              <path
+                d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- START: Added Letter and Word Spacing Controls -->
+    <div class="setting-group">
+      <label
+        for="letterSpacingInput"
+        class="input-label"
+        data-i18n-key="letterSpacingLabel"
+      ></label>
+      <div class="custom-number-input">
+        <input
+          type="text"
+          id="letterSpacingInput"
+          class="numeric-input-field"
+          inputmode="numeric"
+          pattern="-?[0-9]*\.?[0-9]+"
+          data-i18n-placeholder-key="spacingPlaceholder"
+        />
+        <div class="stepper-buttons">
+          <button
+            type="button"
+            class="stepper-btn stepper-up"
+            data-target="letterSpacingInput"
+            data-step="0.1"
+            data-i18n-aria-label-key="increaseLetterSpacingAria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 -960 960 960"
+              width="18px"
+            >
+              <path
+                d="M480-528 324-372q-11 11-28 11t-28-11q-11-11-11-28t11-28l184-184q12-12 28-12t28 12l184 184q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-528Z"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="stepper-btn stepper-down"
+            data-target="letterSpacingInput"
+            data-step="0.1"
+            data-i18n-aria-label-key="decreaseLetterSpacingAria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 -960 960 960"
+              width="18px"
+            >
+              <path
+                d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="setting-group">
+      <label
+        for="wordSpacingInput"
+        class="input-label"
+        data-i18n-key="wordSpacingLabel"
+      ></label>
+      <div class="custom-number-input">
+        <input
+          type="text"
+          id="wordSpacingInput"
+          class="numeric-input-field"
+          inputmode="numeric"
+          pattern="-?[0-9]*\.?[0-9]+"
+          data-i18n-placeholder-key="spacingPlaceholder"
+        />
+        <div class="stepper-buttons">
+          <button
+            type="button"
+            class="stepper-btn stepper-up"
+            data-target="wordSpacingInput"
+            data-step="0.5"
+            data-i18n-aria-label-key="increaseWordSpacingAria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 -960 960 960"
+              width="18px"
+            >
+              <path
+                d="M480-528 324-372q-11 11-28 11t-28-11q-11-11-11-28t11-28l184-184q12-12 28-12t28 12l184 184q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-528Z"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="stepper-btn stepper-down"
+            data-target="wordSpacingInput"
+            data-step="0.5"
+            data-i18n-aria-label-key="decreaseWordSpacingAria"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="18px"
+              viewBox="0 -960 960 960"
+              width="18px"
+            >
+              <path
+                d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- END: Added Letter and Word Spacing Controls -->
+
+    <div class="setting-group">
+      <label class="group-label" data-i18n-key="textDirectionLabel"></label>
+      <div class="direction-buttons">
+        <button class="direction-button" id="btnRtl" value="rtl">
+          <span data-i18n-key="rtlButton"></span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="40px"
+            viewBox="0 -960 960 960"
+            width="40px"
+            fill="currentColor"
+          >
+            <path
+              d="M120-773.33V-840h720v66.67H120ZM360-610v-66.67h480V-610H360ZM120-446.67v-66.66h720v66.66H120Zm240 163.34V-350h480v66.67H360ZM120-120v-66.67h720V-120H120Z"
+            />
+          </svg>
+        </button>
+        <button class="direction-button" id="btnLtr" value="ltr">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="40px"
+            viewBox="0 -960 960 960"
+            width="40px"
+            fill="currentColor"
+          >
+            <path
+              d="M120-120v-66.67h720V-120H120Zm0-163.33V-350h480v66.67H120Zm0-163.34v-66.66h720v66.66H120ZM120-610v-66.67h480V-610H120Zm0-163.33V-840h720v66.67H120Z"
+            />
+          </svg>
+          <span data-i18n-key="ltrButton"></span>
+        </button>
+      </div>
+    </div>
+
+    <script src="i18n-manager.js"></script>
+    <script src="fonts-config.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

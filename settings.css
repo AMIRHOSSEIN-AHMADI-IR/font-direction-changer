@@ -1,0 +1,694 @@
+/**
+ * @file settings.css
+ * @description Specific styles for the extension's settings page.
+ * This file styles the layout, cards, and custom components like the
+ * segmented control, site list, and custom dropdowns. It relies on
+ * variables defined in `style.css`.
+ */
+
+/* =============================================
+   Root Variables for Settings Page
+   ============================================= */
+:root {
+  --card-padding: 16px;
+  --card-gap: 20px; /* Gap between cards and other major elements */
+  --control-unified-height: 44px; /* A consistent height for controls on this page */
+}
+
+/* =============================================
+   Base Layout & Structure
+   ============================================= */
+html {
+  background-color: var(--background-color);
+}
+
+body {
+  display: flex;
+  justify-content: center; /* Center the main container horizontally */
+  align-items: flex-start;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: 420px; /* Constrains the width for a clean, single-column layout */
+  padding: var(--card-gap);
+  box-sizing: border-box;
+}
+
+/* -- Page Header -- */
+.page-header {
+  padding-bottom: 8px;
+  margin-bottom: var(--card-gap);
+  border-bottom: 1px solid var(--subtle-background-color);
+}
+
+body.dark-theme .page-header {
+  border-bottom-color: var(--dark-subtle-background-color);
+}
+
+.page-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* =============================================
+   Card Component
+   ============================================= */
+.card {
+  background-color: var(--surface-color);
+  border-radius: var(--radius-outer);
+  margin-bottom: var(--card-gap);
+  overflow: hidden; /* Default behavior to contain elements */
+}
+
+/* Allows dropdowns inside the card to overflow when active */
+.card.overflow-visible {
+  overflow: visible;
+}
+
+.card-header {
+  padding: var(--card-padding) var(--card-padding) 0;
+}
+
+.card-header .group-label {
+  margin: 0;
+  font-size: 15px;
+}
+
+.card-body {
+  padding: var(--card-padding);
+}
+
+.card .setting-group:last-child {
+  margin-bottom: 0; /* Removes extra space at the bottom of a card */
+}
+
+.group-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* =============================================
+   UI Components
+   ============================================= */
+
+/* -- Segmented Theme Selector -- */
+.segmented-control {
+  position: relative;
+  display: flex;
+  width: 100%;
+  background-color: var(--subtle-background-color);
+  border-radius: var(--control-border-radius);
+  padding: 4px;
+  box-sizing: border-box;
+  height: var(--control-unified-height);
+}
+
+.segmented-indicator {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: calc(100% - 8px);
+  background-color: var(--surface-color);
+  border-radius: var(--radius-inner);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  /* Smooth transition for the sliding indicator */
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.segmented-btn {
+  flex: 1; /* Each button takes equal space */
+  border: none;
+  background-color: transparent;
+  font-family: var(--ui-font);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 1; /* Ensures text is above the indicator */
+}
+
+.segmented-btn.active {
+  color: var(--primary-text-color);
+}
+
+body.dark-theme .segmented-control {
+  background-color: var(--dark-background);
+}
+
+body.dark-theme .segmented-indicator {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* -- Site Search Bar -- */
+.search-bar-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+#siteSearchInput {
+  width: 100%;
+  height: 44px;
+  border: 1px solid var(--subtle-background-color);
+  border-radius: var(--control-border-radius);
+  font-family: var(--ui-font);
+  font-size: 14px;
+  box-sizing: border-box;
+  background-color: var(--subtle-background-color);
+  color: var(--primary-text-color);
+  padding: 0 var(--control-padding-x);
+}
+/* Adjust padding for the clear button */
+body.lang-ltr #siteSearchInput {
+  padding-right: 36px;
+}
+body.lang-rtl #siteSearchInput {
+  padding-left: 36px;
+}
+
+#siteSearchInput:focus {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+  border-color: transparent;
+  background-color: var(--surface-color);
+}
+
+#clearSearchButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  font-size: 24px;
+  padding: 0 8px;
+  display: none; /* Shown by JavaScript when input is not empty */
+}
+body.lang-ltr #clearSearchButton {
+  right: 4px;
+}
+body.lang-rtl #clearSearchButton {
+  left: 4px;
+}
+
+/* -- Configured Sites List -- */
+.sites-list {
+  background-color: var(--subtle-background-color);
+  border-radius: var(--radius-middle);
+  padding: var(--list-padding);
+}
+
+.sites-list > p {
+  /* "No sites" message */
+  text-align: center;
+  padding: 20px 10px;
+  color: var(--secondary-text-color);
+}
+
+.site-item {
+  background-color: var(--surface-color);
+  border-radius: var(--radius-inner);
+  margin-bottom: var(--list-padding);
+}
+
+.site-item:last-child {
+  margin-bottom: 0;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px var(--control-padding-x);
+}
+
+.site-header .site-host {
+  font-weight: 500;
+  text-overflow: ellipsis; /* Prevent long hostnames from breaking layout */
+  white-space: nowrap;
+  overflow: hidden;
+  padding-right: 10px;
+}
+
+/* Collapsible details section */
+.site-details {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  padding: 0 var(--control-padding-x);
+  border-top: 1px solid transparent;
+}
+
+.site-item.expanded .site-details {
+  max-height: 300px; /* Animates the height */
+  opacity: 1;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-top-color: var(--subtle-background-color);
+}
+
+.site-detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.detail-label {
+  color: var(--secondary-text-color);
+}
+body.lang-ltr .detail-label {
+  margin-right: 12px;
+}
+body.lang-rtl .detail-label {
+  margin-left: 12px;
+}
+
+.detail-value {
+  font-weight: 500;
+}
+
+/* -- Kebab Menu & Context Menu -- */
+.kebab-menu-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  margin: -4px;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary-text-color);
+  flex-shrink: 0;
+}
+
+.kebab-menu-btn:hover {
+  background-color: var(--subtle-background-color);
+  color: var(--primary-text-color);
+}
+
+.kebab-menu-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.context-menu {
+  position: absolute;
+  z-index: 1000;
+  background-color: var(--surface-color);
+  border-radius: var(--radius-inner);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 4px;
+  min-width: 150px;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+  transform-origin: top left;
+}
+body.lang-rtl .context-menu {
+  transform-origin: top right;
+}
+
+.context-menu.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.context-menu-item {
+  background: none;
+  border: none;
+  display: block;
+  width: 100%;
+  text-align: start;
+  padding: 8px 10px;
+  border-radius: var(--radius-inner);
+  cursor: pointer;
+  font-family: var(--ui-font);
+  font-size: 14px;
+  color: var(--primary-text-color);
+  background-color: transparent;
+}
+
+.context-menu-item:hover {
+  background-color: var(--subtle-background-color);
+}
+
+.context-menu-item.danger {
+  color: #dc3545;
+}
+body.dark-theme .context-menu-item.danger {
+  color: #ff5c5c;
+}
+body.dark-theme .context-menu-item:hover {
+  background-color: var(--dark-subtle-background-color);
+}
+
+/* =============================================
+   Action Buttons & Forms
+   ============================================= */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 15px;
+  font-family: var(--ui-font);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--control-border-radius);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  box-sizing: border-box;
+}
+
+.btn:active {
+  transform: scale(0.98); /* Click feedback */
+}
+
+.btn-secondary {
+  background-color: var(--subtle-background-color);
+  color: var(--primary-text-color);
+}
+.btn-secondary:hover {
+  background-color: var(--active-color);
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+.btn-danger:hover {
+  background-color: #c82333;
+}
+body.dark-theme .btn-danger {
+  background-color: #a02c37;
+}
+body.dark-theme .btn-danger:hover {
+  background-color: #8a252e;
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.danger-zone {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--subtle-background-color);
+}
+
+/* -- Status Message (for import/export) -- */
+.status-message {
+  font-size: 13px;
+  margin-top: 0;
+  min-height: 0;
+  text-align: center;
+  padding: 0 12px;
+  border-radius: var(--radius-inner);
+  transition: all 0.3s ease;
+  opacity: 0;
+  max-height: 0; /* Animate height from 0 for smooth appearance */
+  overflow: hidden;
+}
+
+.status-message.visible {
+  opacity: 1;
+  max-height: 100px;
+  margin-top: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.status-message.success {
+  color: #155724;
+  background-color: #d4edda;
+}
+.status-message.error {
+  color: #721c24;
+  background-color: #f8d7da;
+}
+
+body.dark-theme .status-message.success {
+  color: #c3e6cb;
+  background-color: #1c4b27;
+}
+body.dark-theme .status-message.error {
+  color: #f5c6cb;
+  background-color: #582126;
+}
+
+/* =============================================
+   Floating Scroll Buttons
+   ============================================= */
+.scroll-buttons-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  direction: ltr; /* Ensure button order is consistent */
+  background-color: var(--surface-color);
+  border-radius: var(--control-border-radius);
+  transition: opacity 0.3s ease;
+}
+
+.scroll-btn {
+  width: 44px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--secondary-text-color);
+  transition: all 0.2s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#scrollDownBtn {
+  border-radius: var(--control-border-radius) 0 0 var(--control-border-radius);
+}
+#scrollUpBtn {
+  border-radius: 0 var(--control-border-radius) var(--control-border-radius) 0;
+}
+
+.scroll-btn:hover {
+  background-color: var(--subtle-background-color);
+  color: var(--primary-text-color);
+}
+
+.scroll-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* State classes managed by JavaScript to show/hide buttons */
+.scroll-buttons-container.up-only #scrollUpBtn {
+  border-radius: var(--control-border-radius);
+}
+.scroll-buttons-container.up-only #scrollDownBtn {
+  width: 0;
+  padding: 0;
+  opacity: 0;
+}
+.scroll-buttons-container.down-only #scrollDownBtn {
+  border-radius: var(--control-border-radius);
+}
+.scroll-buttons-container.down-only #scrollUpBtn {
+  width: 0;
+  padding: 0;
+  opacity: 0;
+}
+.scroll-buttons-container.none-visible {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* =============================================
+   Dark Theme Overrides
+   ============================================= */
+body.dark-theme .scroll-btn:hover {
+  background-color: var(--dark-subtle-background-color);
+  color: var(--dark-primary-text);
+}
+
+body.dark-theme #siteSearchInput,
+body.dark-theme .sites-list {
+  background-color: var(--dark-background);
+  border-color: var(--dark-subtle-background-color);
+}
+
+body.dark-theme #siteSearchInput:focus {
+  background-color: var(--dark-surface-color);
+}
+
+body.dark-theme .site-item.expanded .site-details,
+body.dark-theme .danger-zone {
+  border-top-color: var(--dark-subtle-background-color);
+}
+
+/* =============================================
+   Custom Select Dropdown
+   ============================================= */
+.custom-select-wrapper {
+  position: relative;
+  z-index: 1; /* Default z-index */
+}
+.custom-select-wrapper.is-active {
+  z-index: 2; /* Higher z-index when active to appear above other content */
+}
+
+.custom-select .select-selected {
+  display: flex;
+  align-items: center;
+  background-color: var(--background-color);
+  border-radius: var(--control-border-radius);
+  height: var(--control-unified-height);
+  padding: 0 var(--control-padding-x);
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease,
+    font-family 0.2s ease;
+  user-select: none;
+}
+
+.custom-select .select-selected:hover {
+  background-color: var(--subtle-background-color);
+}
+
+.custom-select.select-active .select-selected {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  background-color: var(--surface-color);
+}
+
+body.dark-theme .custom-select .select-selected {
+  background-color: var(--dark-background);
+}
+body.dark-theme .custom-select .select-selected:hover,
+body.dark-theme .custom-select.select-active .select-selected {
+  background-color: var(--dark-subtle-background-color);
+}
+
+/* Dropdown arrow icon */
+.custom-select .select-selected::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%20-960%20960%2F960%22%20fill%3D%22%236c757d%22%3E%3Cpath%20d%3D%22M480-344L240-584l56-56L480-456l184-184l56%2056L480-344Z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: transform 0.2s ease;
+}
+body.lang-ltr .custom-select .select-selected::after {
+  right: 14px;
+}
+body.lang-rtl .custom-select .select-selected::after {
+  left: 14px;
+}
+body.dark-theme .custom-select .select-selected::after {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%20-960%20960%2F960%22%20fill%3D%22%23adb5bd%22%3E%3Cpath%20d%3D%22M480-344L240-584l56-56L480-456l184-184l56%2056L480-344Z%22%2F%3E%3C%2Fsvg%3E");
+}
+
+.custom-select.select-active .select-selected::after {
+  transform: rotate(180deg); /* Flip arrow when open */
+}
+
+/* The dropdown panel with options */
+.custom-select .select-items {
+  position: absolute;
+  background-color: var(--background-color);
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 99;
+  border-radius: var(--radius-middle);
+  border: 1px solid var(--subtle-background-color); /* Subtle border for definition */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.custom-select .select-items::-webkit-scrollbar {
+  display: none;
+}
+
+body.dark-theme .custom-select .select-items {
+  background-color: var(--dark-background);
+  border: 1px solid var(--dark-active-color);
+}
+
+.custom-select.select-active .select-items {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.custom-select .select-items div {
+  /* Individual option item */
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: var(--radius-inner);
+  transition: background-color 0.15s ease;
+}
+
+.custom-select .select-items div:hover {
+  background-color: var(--surface-color);
+}
+body.dark-theme .custom-select .select-items div:hover {
+  background-color: var(--dark-surface-color);
+}
+
+/* Styles for language selector flags */
+.flag-icon {
+  width: 22px;
+  height: 15px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+body.lang-ltr .flag-icon {
+  margin-right: 10px;
+}
+body.lang-rtl .flag-icon {
+  margin-left: 10px;
+}
+
+/* Special rule to apply the selected font to the UI font selector itself */
+#customUiFontSelect .select-selected {
+  font-family: var(--selected-ui-font, var(--ui-font));
+}

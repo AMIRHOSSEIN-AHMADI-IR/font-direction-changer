@@ -1,0 +1,432 @@
+/**
+ * @file style.css
+ * @description Main stylesheet for the extension's UI (popup and settings).
+ * Contains CSS variables, base styles, and component styles.
+ */
+
+/* =============================================
+   Root Variables Definition
+   ============================================= */
+:root {
+  /* -- New High-Contrast & Crisp Light Theme Palette -- */
+  --primary-color: #3b82f6;
+  --primary-text-color: #111827;
+  --secondary-text-color: #6b7280;
+  --background-color: #f7f8f9;
+  --surface-color: #ffffff;
+  --subtle-background-color: #f1f3f5;
+  --hover-color: #eff2f5;
+  --active-color: #e4e7eb;
+
+  /* -- Other Global Variables -- */
+  --input-stepper-gap: 8px;
+  --base-font-size: 14px;
+  --line-height: 1.6;
+  --padding-base: 15px;
+  --popup-width: 280px;
+  --ui-font: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+  /* -- Dark Theme Variables -- */
+  --dark-primary-text: #e9ecef;
+  --dark-secondary-text: #adb5bd;
+  --dark-button-text: #ffffff;
+  --dark-icon-color: #adb5bd;
+  --dark-background: #18191a;
+  --dark-surface-color: #242526;
+  --dark-subtle-background-color: #2c2e30;
+  --dark-hover-color: #3a3b3c;
+  --dark-active-color: #4e4f50;
+
+  /* -- Unified Control Sizing -- */
+  --control-height: 49px;
+  --control-padding-x: 14px;
+
+  /* -- Refined Hierarchical Radius System -- */
+  --list-padding: 8px;
+  --radius-inner: 8px;
+  --radius-middle: 12px;
+  --radius-outer: 16px;
+  --control-border-radius: 12px;
+}
+
+/* =============================================
+   Base & Global Styles
+   ============================================= */
+body {
+  width: var(--popup-width);
+  font-family: var(--ui-font);
+  font-size: var(--base-font-size);
+  line-height: var(--line-height);
+  color: var(--primary-text-color);
+  background-color: var(--background-color);
+  padding: var(--padding-base);
+  margin: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* -- Activate dark theme by adding the .dark-theme class to the body -- */
+body.dark-theme {
+  --primary-text-color: var(--dark-primary-text);
+  --secondary-text-color: var(--dark-secondary-text);
+  --background-color: var(--dark-background);
+  --surface-color: var(--dark-surface-color);
+  --subtle-background-color: var(--dark-subtle-background-color);
+  --hover-color: var(--dark-hover-color);
+  --active-color: var(--dark-active-color);
+}
+
+/* -- General styles for SVG icons -- */
+svg {
+  fill: currentColor;
+  vertical-align: middle;
+}
+
+/* -- Managing SVG icon colors across different themes -- */
+body.dark-theme svg:not(.direction-button svg):not(.stepper-btn svg) {
+  fill: var(--dark-primary-text);
+}
+
+body:not(.dark-theme) svg:not(.direction-button svg):not(.stepper-btn svg) {
+  fill: var(--primary-text-color);
+}
+
+/* =============================================
+   Select Element (Dropdown) Styles
+   ============================================= */
+select {
+  width: 100%;
+  height: var(--control-height);
+  line-height: var(--control-height);
+  border: none;
+  border-radius: var(--control-border-radius);
+  background-color: var(--surface-color);
+  font-size: inherit;
+  font-family: var(--ui-font);
+  appearance: none;
+  -webkit-appearance: none;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  color: var(--primary-text-color);
+}
+
+/* -- Default LTR styles for select padding and icon position -- */
+body.lang-ltr select {
+  padding-left: var(--control-padding-x);
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%2240px%22%20viewBox%3D%220%20-960%20960%20960%22%20width%3D%2240px%22%20fill%3D%22%236c757d%22%3E%3Cpath%20d%3D%22M481-349.33q-9%200-16.33-2.84-7.34-2.83-13.34-9.5l-196-196q-12.33-11.66-12-29.33.34-17.67%2012.67-30%2012.33-11.67%2029.67-11.67%2017.33%200%2029.66%2011.67L481-450.67%20646.67-617Q659-628.67%20676-628.33q17%20.33%2029.33%2012%2012.34%2012.33%2012.34%2030%200%2017.66-12.34%2029.33L510-361.67q-6%206.67-13.33%209.5-7.34%202.84-15.67%202.84Z%22%2F%3E%3C%2Fsvg%3E");
+  background-position: right 10px center;
+}
+body.lang-ltr.dark-theme select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%2240px%22%20viewBox%3D%220%20-960%20960%20960%22%20width%3D%2240px%22%20fill%3D%22%23adb5bd%22%3E%3Cpath%20d%3D%22M481-349.33q-9%200-16.33-2.84-7.34-2.83-13.34-9.5l-196-196q-12.33-11.66-12-29.33.34-17.67%2012.67-30%2012.33-11.67%2029.67-11.67%2017.33%200%2029.66%2011.67L481-450.67%20646.67-617Q659-628.67%20676-628.33q17%20.33%2029.33%2012%2012.34%2012.33%2012.34%2030%200%2017.66-12.34%2029.33L510-361.67q-6%206.67-13.33%209.5-7.34%202.84-15.67%202.84Z%22%2F%3E%3C%2Fsvg%3E");
+}
+
+/* -- RTL styles for select padding and icon position -- */
+body.lang-rtl select {
+  padding-right: var(--control-padding-x);
+  padding-left: 30px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%2240px%22%20viewBox%3D%220%20-960%20960%20960%22%20width%3D%2240px%22%20fill%3D%22%236c757d%22%3E%3Cpath%20d%3D%22M481-349.33q-9%200-16.33-2.84-7.34-2.83-13.34-9.5l-196-196q-12.33-11.66-12-29.33.34-17.67%2012.67-30%2012.33-11.67%2029.67-11.67%2017.33%200%2029.66%2011.67L481-450.67%20646.67-617Q659-628.67%20676-628.33q17%20.33%2029.33%2012%2012.34%2012.33%2012.34%2030%200%2017.66-12.34%2029.33L510-361.67q-6%206.67-13.33%209.5-7.34%202.84-15.67%202.84Z%22%2F%3E%3C%2Fsvg%3E");
+  background-position: left 10px center;
+}
+body.lang-rtl.dark-theme select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%2240px%22%20viewBox%3D%220%20-960%20960%20960%22%20width%3D%2240px%22%20fill%3D%22%23adb5bd%22%3E%3Cpath%20d%3D%22M481-349.33q-9%200-16.33-2.84-7.34-2.83-13.34-9.5l-196-196q-12.33-11.66-12-29.33.34-17.67%2012.67-30%2012.33-11.67%2029.67-11.67%2017.33%200%2029.66%2011.67L481-450.67%20646.67-617Q659-628.67%20676-628.33q17%20.33%2029.33%2012%2012.34%2012.33%2012.34%2030%200%2017.66-12.34%2029.33L510-361.67q-6%206.67-13.33%209.5-7.34%202.84-15.67%202.84Z%22%2F%3E%3C%2Fsvg%3E");
+}
+
+/* -- Select Interactive States -- */
+select:hover {
+  background-color: var(--hover-color);
+}
+select:focus {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+select:disabled {
+  background-color: var(--subtle-background-color) !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+  color: var(--secondary-text-color) !important;
+}
+
+/* -- Styles for items within select (option) -- */
+select option {
+  direction: rtl;
+  font-size: var(--base-font-size);
+  padding: 6px 10px;
+  color: var(--primary-text-color);
+  line-height: 1.4;
+  background-color: var(--surface-color);
+}
+body.lang-ltr select option {
+  direction: ltr;
+}
+select option:hover {
+  background-color: var(--hover-color);
+}
+select#fontWeightSelect option[value=""] {
+  font-family: var(--ui-font);
+  font-weight: normal;
+}
+
+/* -- Select Styles for Dark Theme -- */
+body.dark-theme select {
+  color: var(--dark-primary-text);
+  background-color: var(--dark-surface-color);
+}
+body.dark-theme select:focus {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.35);
+}
+body.dark-theme select:disabled {
+  background-color: var(--dark-subtle-background-color) !important;
+  opacity: 0.5;
+  color: var(--dark-secondary-text) !important;
+}
+body.dark-theme select option {
+  color: var(--dark-primary-text);
+  background-color: var(--dark-surface-color);
+}
+body.dark-theme select option:hover {
+  background-color: var(--dark-active-color);
+}
+
+/* =============================================
+   Custom Number Input Stepper Component
+   ============================================= */
+.custom-number-input {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: var(--control-height);
+  gap: var(--input-stepper-gap);
+}
+
+.custom-number-input input.numeric-input-field {
+  flex-grow: 1;
+  border: none;
+  border-radius: var(--control-border-radius);
+  outline: none;
+  font-size: inherit;
+  font-family: var(--ui-font);
+  color: var(--primary-text-color);
+  background-color: var(--surface-color);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 var(--control-padding-x);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.lang-rtl .custom-number-input input.numeric-input-field {
+  text-align: right;
+}
+body.lang-ltr .custom-number-input input.numeric-input-field {
+  text-align: left;
+}
+.custom-number-input input.numeric-input-field:hover {
+  background-color: var(--hover-color);
+}
+.custom-number-input input.numeric-input-field:focus {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+.custom-number-input input.numeric-input-field::placeholder {
+  color: var(--secondary-text-color);
+  opacity: 0.7;
+}
+
+.stepper-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  flex-shrink: 0;
+  border-radius: var(--control-border-radius);
+  overflow: hidden;
+  background-color: var(--surface-color);
+}
+
+.stepper-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-grow: 1;
+  border: none;
+  background-color: transparent;
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.stepper-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.stepper-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+.stepper-btn:active {
+  background-color: #0056b3;
+  color: white;
+}
+.stepper-btn.stepper-up {
+  border-bottom: 1px solid var(--subtle-background-color);
+}
+body.dark-theme .stepper-btn.stepper-up {
+  border-bottom-color: var(--dark-background);
+}
+
+/* Dark Theme Adjustments for Custom Number Input */
+body.dark-theme .custom-number-input input.numeric-input-field:focus {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.35);
+}
+body.dark-theme .custom-number-input input.numeric-input-field::placeholder {
+  color: var(--dark-secondary-text);
+}
+
+/* Disabled state for custom number input */
+.custom-number-input input.numeric-input-field:disabled,
+.custom-number-input input.numeric-input-field[disabled] {
+  background-color: var(--subtle-background-color) !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+  color: var(--secondary-text-color) !important;
+}
+.stepper-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: transparent !important;
+  color: var(--secondary-text-color) !important;
+}
+
+/* =============================================
+   General UI Elements
+   ============================================= */
+div.setting-group {
+  margin-bottom: 12px;
+} /* Reduced margin for a tighter UI */
+div.setting-group:last-child {
+  margin-bottom: 0;
+}
+
+label.group-label,
+label.select-label,
+label.input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  margin-bottom: 8px;
+}
+
+/* Direction Buttons */
+.direction-buttons {
+  display: flex;
+  gap: var(--input-stepper-gap);
+  margin-top: 5px;
+  direction: rtl;
+}
+.direction-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  direction: ltr;
+  flex: 1;
+  padding: 0 10px;
+  height: var(--control-height);
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  background-color: var(--surface-color);
+  border: none;
+  border-radius: var(--control-border-radius);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  position: relative;
+  box-sizing: border-box;
+}
+.direction-button svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: currentColor !important;
+}
+.direction-button:hover {
+  background-color: var(--hover-color);
+}
+.direction-button:active {
+  transform: scale(0.97);
+}
+.direction-button.active {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 500;
+}
+body.lang-rtl .direction-button span {
+  direction: rtl;
+}
+body.lang-ltr .direction-button span {
+  direction: ltr;
+}
+
+/* Action Buttons (Reset, Settings) */
+#resetButton,
+#settingsButton {
+  position: absolute;
+  top: 8px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  box-sizing: border-box;
+  color: var(--secondary-text-color);
+}
+body.lang-rtl #resetButton {
+  left: 44px;
+}
+body.lang-rtl #settingsButton {
+  left: 8px;
+}
+body.lang-ltr #resetButton {
+  right: 44px;
+}
+body.lang-ltr #settingsButton {
+  right: 8px;
+}
+#resetButton:hover,
+#settingsButton:hover {
+  background-color: var(--active-color);
+  color: var(--primary-text-color);
+}
+body.dark-theme #resetButton:hover,
+body.dark-theme #settingsButton:hover {
+  color: var(--dark-primary-text);
+}
+#resetButton svg,
+#settingsButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* =============================================
+   Miscellaneous & Utility Styles
+   ============================================= */
+button {
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+*:focus {
+  outline: none !important;
+}

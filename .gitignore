@@ -1,0 +1,12 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# Build artifacts or packaged extensions
+*.zip
+*.crx
+*.xpi
+
+# Editor specific files
+.vscode/
+.idea/
