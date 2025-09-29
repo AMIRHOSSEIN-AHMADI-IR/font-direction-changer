@@ -7,7 +7,7 @@
 
 // --- Constants and Global Scope Variables ---
 
-const storageArea = chrome.storage.sync;
+const storageArea = browser.storage.sync;
 const EXPORT_FILE_NAME = "font_changer_settings_backup.json";
 const ALL_SETTINGS_KEY = "fontChangerAllSettingsBackup";
 const DEFAULT_UI_FONT = "Vazirmatn";
@@ -273,7 +273,7 @@ function showContextMenu(event, host) {
   menu.style.top = `${top}px`;
   menu.style.left = `${left}px`;
   menu.querySelector('[data-action="open"]').addEventListener("click", () => {
-    chrome.tabs.create({ url: `https://${host}`, active: true });
+    browser.tabs.create({ url: `https://${host}`, active: true });
     closeContextMenu();
   });
   menu
@@ -594,7 +594,7 @@ async function handleResetAllSettings() {
 }
 
 // --- Chrome API Listeners ---
-chrome.runtime.onMessage.addListener(async (msg) => {
+browser.runtime.onMessage.addListener(async (msg) => {
   if (msg.type === "THEME_CHANGED") {
     applyThemeToSettingsPage(msg.theme);
     updateThemeIndicator(msg.theme || "system");
@@ -604,7 +604,7 @@ chrome.runtime.onMessage.addListener(async (msg) => {
   }
 });
 
-chrome.storage.onChanged.addListener(async (changes, area) => {
+browser.storage.onChanged.addListener(async (changes, area) => {
   if (area !== "sync") return;
   let refreshList = false;
   let uiFontChanged = false;

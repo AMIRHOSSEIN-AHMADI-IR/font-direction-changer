@@ -6,8 +6,8 @@
 // --- Constants and Global State ---
 const STYLE_OVERRIDE_TAG_ID = "font-direction-changer-style-override";
 const FONT_LINK_TAG_ID = "font-direction-changer-font-link";
-const storageArea = chrome.storage.sync;
-const sessionStore = chrome.storage.session;
+const storageArea = browser.storage.sync;
+const sessionStore = browser.storage.session;
 
 // Caches the last applied settings to be used by the MutationObserver.
 let currentAppliedFont = null;
@@ -334,7 +334,7 @@ function resetPageStyles() {
 /**
  * Listens for messages from the popup or other extension parts.
  */
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "applyStyles") {
     // UPDATED: Unpack and pass all settings, including new spacing values.
     applyPageStyles(

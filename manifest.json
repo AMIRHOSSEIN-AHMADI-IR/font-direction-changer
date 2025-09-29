@@ -1,61 +1,40 @@
 {
-  // Specifies the version of the manifest file format. Version 3 is the latest standard.
   "manifest_version": 3,
-
-  // The name of the extension, displayed in the Chrome Web Store and browser UI.
   "name": "Advanced Font Changer",
-
-  // The version of your extension. Increment this when you release updates.
   "version": "1.0",
-
-  // A brief summary of the extension's purpose.
   "description": "Take full control of web typography. Customize font family, size, weight, and text direction on any website.",
-
-  // A list of permissions the extension requires to function.
-  "permissions": [
-    "activeTab", // Allows interaction with the currently active tab (needed for the popup to get the URL).
-    "scripting", // Allows the extension to inject and execute scripts into web pages.
-    "storage", // Allows the extension to store settings (using chrome.storage.sync and .session).
-    "tabs" // Allows the extension to query tab information (e.g., URL changes, active tab).
-  ],
-
-  // Defines the extension's icon and popup behavior when clicked in the toolbar.
+  "permissions": ["activeTab", "scripting", "storage", "tabs"],
   "action": {
-    "default_popup": "popup.html", // The HTML file to show when the user clicks the extension icon.
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     }
   },
-
-  // Defines scripts that run in the context of web pages.
   "content_scripts": [
     {
-      "matches": ["<all_urls>"], // The script will be injected into all web pages.
-      "js": ["content.js"], // The JavaScript file to inject.
-      "run_at": "document_idle", // Injects the script after the DOM is complete, which is a good default.
-      "all_frames": true // Allows the script to run in all iframes within a page.
+      "matches": ["<all_urls>"],
+      "js": ["lib/browser-polyfill.min.js", "content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
     }
   ],
-
-  // Defines the icons used for the extension in various places (e.g., extensions management page).
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-
-  // Makes certain extension files accessible from web pages.
   "web_accessible_resources": [
     {
-      // A list of resources that need to be web-accessible.
-      "resources": [
-        "settings.html", // Allows the settings page to be opened in a new tab.
-        "icons/flags/*.svg" // Allows the flag icons to be loaded in the settings page.
-      ],
-      // Specifies which pages can access these resources ('*://*/*' allows any website).
+      "resources": ["settings.html", "icons/flags/*.svg"],
       "matches": ["*://*/*"]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "advanced-font-changer@your-name.com",
+      "strict_min_version": "109.0"
+    }
+  }
 }

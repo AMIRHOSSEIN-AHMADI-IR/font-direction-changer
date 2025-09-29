@@ -3,7 +3,7 @@
  * @description The service worker for the Font Changer extension.
  * It acts as a central event bus, listening for messages from different parts
  * of the extension (like the popup and settings page) and for changes in
- * chrome.storage.sync. Its primary role is to ensure that all views
+ * browser.storage.sync. Its primary role is to ensure that all views
  * (popup, settings page, content scripts) are synchronized with the latest data.
  */
 
@@ -11,12 +11,12 @@
  * Listens for messages sent from other parts of the extension.
  * This is the primary hub for direct communication between scripts.
  */
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Handle when the user changes the theme from the popup.
   if (message.type === "USER_CHANGED_THEME_PREFERENCE") {
     const newTheme = message.theme;
     // Broadcast a generic "THEME_CHANGED" message to all parts of the extension.
-    chrome.runtime
+    browser.runtime
       .sendMessage({ type: "THEME_CHANGED", theme: newTheme })
       .catch((e) =>
         console.warn(
@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "SITE_DATA_DID_CHANGE") {
     // Forward this message to other views, particularly the settings page,
     // so it can refresh its list of configured sites.
-    chrome.runtime
+    browser.runtime
       .sendMessage({ type: "SITE_DATA_DID_CHANGE_FORWARDED" })
       .catch((e) =>
         console.warn(
@@ -47,14 +47,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // This message type would be used after a successful settings import.
   if (message.type === "SETTINGS_IMPORTED_SUCCESSFULLY") {
     // Send a message to the popup, telling it to reload its settings.
-    chrome.runtime
+    browser.runtime
       .sendMessage({ type: "RELOAD_POPUP_SETTINGS" })
       .catch((e) =>
         console.warn("Error telling popup to reload after import:", e.message)
       );
 
     // Note: Active tabs will automatically re-apply styles because their
-    // content scripts are listening to the `chrome.storage.onChanged` event.
+    // content scripts are listening to the `browser.storage.onChanged` event.
     // Explicitly messaging them is often not necessary unless an immediate,
     // forced refresh is desired. The onChanged listener is more robust.
     sendResponse({
@@ -68,11 +68,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 /**
- * Listens for any changes made to chrome.storage.
+ * Listens for any changes made to browser.storage.
  * This is the most reliable way to detect data changes, as it captures updates
  * from the popup, the settings page, and even from other devices via sync.
  */
-chrome.storage.onChanged.addListener((changes, areaName) => {
+browser.storage.onChanged.addListener((changes, areaName) => {
   // We only care about the 'sync' storage area.
   if (areaName === "sync") {
     let siteDataWasAltered = false;
@@ -83,7 +83,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       if (key === "theme") {
         if (changes[key].newValue !== changes[key].oldValue) {
           // If the theme value actually changed, broadcast the change.
-          chrome.runtime
+          browser.runtime
             .sendMessage({
               type: "THEME_CHANGED",
               theme: changes[key].newValue,
@@ -114,7 +114,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     // If any site-specific data was added, removed, or changed,
     // send a single message to notify relevant parts of the extension.
     if (siteDataWasAltered) {
-      chrome.runtime
+      browser.runtime
         .sendMessage({ type: "SITE_DATA_DID_CHANGE" })
         .catch((error) => {
           console.error(

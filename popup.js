@@ -70,7 +70,6 @@ const fontsWithWeightSupport = {
 const numberInputConfig = {
   fontSizeInput: { min: 8, max: 72, step: 1, default: "" },
   lineHeightInput: { min: 0.8, max: 3, step: 0.1, default: "" },
-  // ADDED: Configuration for the new spacing inputs.
   letterSpacingInput: { min: -5, max: 10, step: 0.1, default: "" },
   wordSpacingInput: { min: -10, max: 30, step: 0.5, default: "" },
 };
@@ -83,7 +82,6 @@ function initializeDOMElements() {
   fontWeightSelect = document.getElementById("fontWeightSelect");
   fontSizeInputElement = document.getElementById("fontSizeInput");
   lineHeightInputElement = document.getElementById("lineHeightInput");
-  // ADDED: Get references to the new spacing input elements.
   letterSpacingInputElement = document.getElementById("letterSpacingInput");
   wordSpacingInputElement = document.getElementById("wordSpacingInput");
   btnRtl = document.getElementById("btnRtl");
@@ -94,8 +92,6 @@ function initializeDOMElements() {
 
 /**
  * Populates the main font selector dropdown with options from the global FONT_LIST.
- * @param {HTMLSelectElement} selectElement - The <select> element to populate.
- * @param {string} selectedValue - The value of the font that should be pre-selected.
  */
 function populateFontSelectDOM(selectElement, selectedValue) {
   if (!selectElement || !window.FONT_LIST || !window.currentTranslations)
@@ -146,7 +142,6 @@ function updateFontWeightSelectAppearance() {
 
 /**
  * Sets the visual 'active' state on the direction buttons.
- * @param {string} activeDirection - The direction to activate ('rtl' or 'ltr').
  */
 function updateDirectionButtonsVisualState(activeDirection) {
   if (!btnRtl || !btnLtr) return;
@@ -156,7 +151,6 @@ function updateDirectionButtonsVisualState(activeDirection) {
 
 /**
  * Gets the currently selected text direction from the UI buttons.
- * @returns {string} 'rtl', 'ltr', or '' (for default).
  */
 function getCurrentSelectedDirection() {
   if (!btnRtl || !btnLtr) return "";
@@ -167,11 +161,10 @@ function getCurrentSelectedDirection() {
 
 /**
  * Asynchronously retrieves the currently active tab in the current window.
- * @returns {Promise<chrome.tabs.Tab|null>} A promise that resolves with the tab object or null.
  */
 async function getCurrentTab() {
   try {
-    const [tab] = await chrome.tabs.query({
+    const [tab] = await browser.tabs.query({
       active: true,
       currentWindow: true,
     });
@@ -184,7 +177,6 @@ async function getCurrentTab() {
 
 /**
  * Saves all settings to sync storage and sends them to the content script of the active tab.
- * UPDATED: Now includes letterSpacing and wordSpacing.
  */
 async function saveAndApplySettings(
   font,
@@ -219,33 +211,36 @@ async function saveAndApplySettings(
     fontSize,
     lineHeight,
     fontWeight,
-    letterSpacing, // ADDED
-    wordSpacing, // ADDED
+    letterSpacing,
+    wordSpacing,
     host: hostname,
   };
 
   try {
-    await chrome.storage.sync.set({ [hostname]: settings });
+    await browser.storage.sync.set({ [hostname]: settings });
   } catch (error) {
     console.error("Error saving settings:", error);
     return;
   }
 
+  // --- START: KEY CORRECTION ---
   if (currentTab.id) {
-    chrome.tabs.sendMessage(
-      currentTab.id,
-      { action: "applyStyles", ...settings },
-      (response) => {
-        if (chrome.runtime.lastError) {
-        }
-      }
-    );
+    try {
+      await browser.tabs.sendMessage(currentTab.id, {
+        action: "applyStyles",
+        ...settings,
+      });
+    } catch (error) {
+      console.warn(
+        `Could not send message to content script: ${error.message}`
+      );
+    }
   }
+  // --- END: KEY CORRECTION ---
 }
 
 /**
  * Applies the specified theme to the popup's body by toggling CSS classes.
- * @param {string} theme - 'light', 'dark', or 'system'.
  */
 window.applyTheme = function (theme) {
   document.body.classList.remove("dark-theme", "light-theme");
@@ -261,8 +256,6 @@ window.applyTheme = function (theme) {
 
 /**
  * Gathers all current values from the UI controls.
- * UPDATED: Reads values from the new spacing inputs.
- * @returns {object} An object containing the current settings from the UI.
  */
 function getCurrentUISettings() {
   return {
@@ -271,15 +264,13 @@ function getCurrentUISettings() {
     direction: getCurrentSelectedDirection(),
     fontSize: fontSizeInputElement.value.trim(),
     lineHeight: lineHeightInputElement.value.trim(),
-    letterSpacing: letterSpacingInputElement.value.trim(), // ADDED
-    wordSpacing: wordSpacingInputElement.value.trim(), // ADDED
+    letterSpacing: letterSpacingInputElement.value.trim(),
+    wordSpacing: wordSpacingInputElement.value.trim(),
   };
 }
 
 /**
  * Dynamically rebuilds the font-weight dropdown based on the selected font family.
- * @param {string} selectedFontName - The name of the currently selected font.
- * @param {string} currentWeightValue - The currently saved weight value to pre-select.
  */
 function updateFontWeightSelector(selectedFontName, currentWeightValue) {
   if (!fontWeightSelect || !window.currentTranslations) return;
@@ -319,12 +310,10 @@ function updateFontWeightSelector(selectedFontName, currentWeightValue) {
 
 /**
  * Adds all necessary event listeners to the UI controls.
- * UPDATED: Now handles the new spacing inputs.
  */
 function addEventListeners() {
   if (!fontSelect || !resetButton) return;
 
-  // Generic handler for all stepper buttons.
   document.querySelectorAll(".stepper-btn").forEach((button) => {
     button.addEventListener("click", function () {
       const targetInputId = this.dataset.target;
@@ -336,7 +325,7 @@ function addEventListeners() {
       let currentValue = parseFloat(inputElement.value.trim());
 
       if (isNaN(currentValue) || inputElement.value.trim() === "") {
-        let baseValue = targetInputId === "fontSizeInput" ? 16 : 0; // Start from 0 for spacing
+        let baseValue = targetInputId === "fontSizeInput" ? 16 : 0;
         currentValue = this.classList.contains("stepper-up")
           ? baseValue - step
           : baseValue + step;
@@ -366,12 +355,11 @@ function addEventListeners() {
     });
   });
 
-  // Generic handler for all number inputs.
   const allNumberInputs = [
     fontSizeInputElement,
     lineHeightInputElement,
     letterSpacingInputElement,
-    wordSpacingInputElement, // ADDED
+    wordSpacingInputElement,
   ];
 
   allNumberInputs.forEach((inputEl) => {
@@ -419,7 +407,6 @@ function addEventListeners() {
     });
   });
 
-  // Event listeners for main controls, now passing all settings.
   fontSelect.addEventListener("change", () => {
     const selectedFont = fontSelect.value;
     fontSelect.style.fontFamily = selectedFont
@@ -486,30 +473,28 @@ function addEventListeners() {
     );
   });
 
-  // UPDATED: Reset button now clears the new spacing inputs.
   resetButton.addEventListener("click", () => {
     populateFontSelectDOM(fontSelect, "");
     updateFontWeightSelector("", "");
     fontSizeInputElement.value = numberInputConfig.fontSizeInput.default;
     lineHeightInputElement.value = numberInputConfig.lineHeightInput.default;
     letterSpacingInputElement.value =
-      numberInputConfig.letterSpacingInput.default; // ADDED
-    wordSpacingInputElement.value = numberInputConfig.wordSpacingInput.default; // ADDED
+      numberInputConfig.letterSpacingInput.default;
+    wordSpacingInputElement.value = numberInputConfig.wordSpacingInput.default;
     updateFontWeightSelectAppearance();
     updateDirectionButtonsVisualState("");
-    saveAndApplySettings("", "", "", "", "", "", ""); // Pass empty values for all
+    saveAndApplySettings("", "", "", "", "", "", "");
   });
 
   if (settingsButton) {
     settingsButton.addEventListener("click", () => {
-      chrome.tabs.create({ url: chrome.runtime.getURL("settings.html") });
+      browser.tabs.create({ url: browser.runtime.getURL("settings.html") });
     });
   }
 }
 
 /**
  * Loads saved settings for the current tab and updates the popup UI.
- * UPDATED: Now loads and displays saved spacing values.
  */
 async function loadSavedSettings() {
   if (!fontSelect) initializeDOMElements();
@@ -532,7 +517,7 @@ async function loadSavedSettings() {
 
   if (hostname && cspWarningElement) {
     try {
-      const sessionData = await chrome.storage.session.get(hostname);
+      const sessionData = await browser.storage.session.get(hostname);
       cspWarningElement.style.display = sessionData[hostname]?.cspBlocked
         ? "flex"
         : "none";
@@ -543,7 +528,7 @@ async function loadSavedSettings() {
     cspWarningElement.style.display = "none";
   }
 
-  const globalData = await chrome.storage.sync.get(["uiFont", "theme"]);
+  const globalData = await browser.storage.sync.get(["uiFont", "theme"]);
   document.documentElement.style.setProperty(
     "--ui-font",
     `"${globalData.uiFont || "Vazirmatn"}"`
@@ -553,7 +538,7 @@ async function loadSavedSettings() {
 
   let siteSettings = null;
   if (hostname && canInteractWithPage) {
-    const siteData = await chrome.storage.sync.get(hostname);
+    const siteData = await browser.storage.sync.get(hostname);
     siteSettings = siteData[hostname];
   }
 
@@ -568,9 +553,9 @@ async function loadSavedSettings() {
   lineHeightInputElement.value =
     siteSettings?.lineHeight ?? numberInputConfig.lineHeightInput.default;
   letterSpacingInputElement.value =
-    siteSettings?.letterSpacing ?? numberInputConfig.letterSpacingInput.default; // ADDED
+    siteSettings?.letterSpacing ?? numberInputConfig.letterSpacingInput.default;
   wordSpacingInputElement.value =
-    siteSettings?.wordSpacing ?? numberInputConfig.wordSpacingInput.default; // ADDED
+    siteSettings?.wordSpacing ?? numberInputConfig.wordSpacingInput.default;
 
   updateDirectionButtonsVisualState(
     siteSettings ? siteSettings.direction || "" : ""
@@ -583,7 +568,7 @@ async function loadSavedSettings() {
     fontSizeInputElement,
     lineHeightInputElement,
     letterSpacingInputElement,
-    wordSpacingInputElement, // ADDED
+    wordSpacingInputElement,
     btnLtr,
     btnRtl,
     resetButton,
@@ -604,7 +589,7 @@ async function loadSavedSettings() {
   }
 }
 
-// --- Main Execution & Chrome API Listeners ---
+// --- Main Execution & Event Listeners ---
 document.addEventListener("DOMContentLoaded", async () => {
   initializeDOMElements();
   await initI18n();
@@ -612,7 +597,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   addEventListeners();
 });
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === "THEME_CHANGED") {
     if (typeof window.applyTheme === "function")
       window.applyTheme(message.theme);
@@ -622,7 +607,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   return false;
 });
 
-chrome.storage.onChanged.addListener(async (changes, namespace) => {
+browser.storage.onChanged.addListener(async (changes, namespace) => {
   if (namespace === "sync") {
     let needsReloadForSettings = false;
     const tab = await getCurrentTab();
@@ -676,12 +661,12 @@ chrome.storage.onChanged.addListener(async (changes, namespace) => {
   }
 });
 
-chrome.tabs.onActivated.addListener(async (activeInfo) => {
+browser.tabs.onActivated.addListener(async (activeInfo) => {
   await initI18n();
   await loadSavedSettings();
 });
 
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   const activeTab = await getCurrentTab();
   if (
     activeTab &&

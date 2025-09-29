@@ -33,7 +33,7 @@ async function loadLanguageFile(langCode) {
     // Create a new script element to load the language file.
     const script = document.createElement("script");
     script.id = "dynamicLanguageScript";
-    script.src = chrome.runtime.getURL(`locales_js/${langCode}.js`);
+    script.src = browser.runtime.getURL(`locales_js/${langCode}.js`);
 
     // Handle successful script loading.
     script.onload = () => {
@@ -181,7 +181,7 @@ async function initI18n() {
   let langToLoad = DEFAULT_LANG;
   try {
     // Attempt to get the user's preferred language from sync storage.
-    const data = await chrome.storage.sync.get("extensionLanguage");
+    const data = await browser.storage.sync.get("extensionLanguage");
     if (data.extensionLanguage) {
       langToLoad = data.extensionLanguage;
     }
