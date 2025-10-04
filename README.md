@@ -32,6 +32,8 @@ Settings Page
 
 This extension will soon be available on official browser stores.
 
+[![Install on Firefox](https://img.shields.io/badge/Get%20the%20Add--on-Firefox-F88B10.svg?logo=firefox&logoColor=white&style=for-the-badge)](https://addons.mozilla.org/firefox/addon/advanced-font-changer/)
+
 ### Manual Installation (for Developers)
 
 1.  Download or `clone` this repository.
