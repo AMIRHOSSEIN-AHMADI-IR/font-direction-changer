@@ -32,6 +32,8 @@
 
 این افزونه به زودی در فروشگاه‌های رسمی مرورگرها منتشر خواهد شد.
 
+[![Install on Firefox](https://img.shields.io/badge/Get%20the%20Add--on-Firefox-F88B10.svg?logo=firefox&logoColor=white&style=for-the-badge)](https://addons.mozilla.org/firefox/addon/advanced-font-changer/)
+
 ### نصب به صورت دستی (برای توسعه‌دهندگان)
 
 1.  این ریپازیتوری را دانلود یا `clone` کنید.
