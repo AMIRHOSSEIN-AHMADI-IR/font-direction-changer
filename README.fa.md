@@ -14,9 +14,6 @@
 
 صفحه تنظیمات
 <img width="1919" height="914" alt="image" src="https://github.com/user-attachments/assets/e1379bb4-d55b-4f26-b078-84f8b7759aae" />
-
----
-
 ## ✨ ویژگی‌های کلیدی
 
 - **بدون فریم‌ورک:** نوشته شده با JavaScript خالص (Vanilla JS) برای حداکثر سرعت و بهینگی.
