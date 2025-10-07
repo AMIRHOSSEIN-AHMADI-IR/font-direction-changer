@@ -15,8 +15,8 @@ let currentAppliedDirection = null;
 let currentAppliedFontSize = null;
 let currentAppliedLineHeight = null;
 let currentAppliedFontWeight = null;
-let currentAppliedLetterSpacing = null; // ADDED
-let currentAppliedWordSpacing = null; // ADDED
+let currentAppliedLetterSpacing = null;
+let currentAppliedWordSpacing = null;
 
 let observer = null;
 let mutationDebounceTimeout = null;
@@ -115,10 +115,6 @@ function getAllShadowRoots(element = document.documentElement) {
   return Array.from(roots);
 }
 
-/**
- * Injects or updates a <style> tag with CSS overrides into a specific root node.
- * UPDATED: Now generates CSS for letter-spacing and word-spacing.
- */
 function applyStylesToRoot(
   rootNode,
   font,
@@ -146,16 +142,15 @@ function applyStylesToRoot(
   let baseElementStyles = "";
   let formElementFontStyles = "";
 
-  // Build the base CSS style string.
   if (font)
     baseElementStyles += `font-family: "${font}", Tahoma, sans-serif !important;`;
   if (fontWeight) baseElementStyles += `font-weight: ${fontWeight} !important;`;
   if (fontSize) baseElementStyles += `font-size: ${fontSize}px !important;`;
   if (lineHeight) baseElementStyles += `line-height: ${lineHeight} !important;`;
   if (letterSpacing)
-    baseElementStyles += `letter-spacing: ${letterSpacing}px !important;`; // ADDED
+    baseElementStyles += `letter-spacing: ${letterSpacing}px !important;`;
   if (wordSpacing)
-    baseElementStyles += `word-spacing: ${wordSpacing}px !important;`; // ADDED
+    baseElementStyles += `word-spacing: ${wordSpacing}px !important;`;
 
   if (font)
     formElementFontStyles += `font-family: "${font}", Tahoma, sans-serif !important;`;
@@ -241,10 +236,6 @@ function applyStylesToRoot(
   }
 }
 
-/**
- * Orchestrates applying styles to the entire page, including all Shadow DOMs.
- * UPDATED: Now passes spacing values.
- */
 function applyPageStyles(
   requestedFont,
   requestedDirection,
@@ -254,18 +245,16 @@ function applyPageStyles(
   requestedLetterSpacing,
   requestedWordSpacing
 ) {
-  // Cache the current settings for the MutationObserver.
   currentAppliedFont = requestedFont;
   currentAppliedDirection = requestedDirection;
   currentAppliedFontSize = requestedFontSize;
   currentAppliedLineHeight = requestedLineHeight;
   currentAppliedFontWeight = requestedFontWeight;
-  currentAppliedLetterSpacing = requestedLetterSpacing; // ADDED
-  currentAppliedWordSpacing = requestedWordSpacing; // ADDED
+  currentAppliedLetterSpacing = requestedLetterSpacing;
+  currentAppliedWordSpacing = requestedWordSpacing;
 
   loadGoogleFont(requestedFont, requestedFontWeight);
 
-  // Apply styles to the main document and all shadow roots.
   applyStylesToRoot(
     document.head,
     requestedFont,
@@ -289,7 +278,6 @@ function applyPageStyles(
     );
   });
 
-  // Set `dir` attribute on the root elements.
   if (requestedDirection) {
     document.documentElement.setAttribute("dir", requestedDirection);
     if (document.body) document.body.setAttribute("dir", requestedDirection);
@@ -305,19 +293,14 @@ function applyPageStyles(
   }
 }
 
-/**
- * Resets all styles applied by the extension to the page.
- * UPDATED: Now clears spacing settings.
- */
 function resetPageStyles() {
-  // Clear all cached settings.
   currentAppliedFont = null;
   currentAppliedDirection = null;
   currentAppliedFontSize = null;
   currentAppliedLineHeight = null;
   currentAppliedFontWeight = null;
-  currentAppliedLetterSpacing = null; // ADDED
-  currentAppliedWordSpacing = null; // ADDED
+  currentAppliedLetterSpacing = null;
+  currentAppliedWordSpacing = null;
 
   loadGoogleFont(null, null);
   applyStylesToRoot(document.head, null, null, "", "", "", null, null);
@@ -331,12 +314,8 @@ function resetPageStyles() {
   });
 }
 
-/**
- * Listens for messages from the popup or other extension parts.
- */
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "applyStyles") {
-    // UPDATED: Unpack and pass all settings, including new spacing values.
     applyPageStyles(
       request.font,
       request.direction,
@@ -358,13 +337,15 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 /**
- * Loads and applies styles saved for the current site when the page loads.
- * UPDATED: Now loads and applies spacing settings.
+ * [MODIFIED] Loads and applies styles saved for the current site when the page loads.
+ * Converted to async/await for reliability.
  */
-function loadAndApplyInitialStyles() {
-  storageArea.get(null, (data) => {
+async function loadAndApplyInitialStyles() {
+  try {
+    const data = await storageArea.get(null);
     const hostname = window.location.hostname;
     const settings = data[hostname];
+
     if (
       settings &&
       (settings.font ||
@@ -385,7 +366,6 @@ function loadAndApplyInitialStyles() {
         settings.wordSpacing
       );
     } else {
-      // Clear all cached settings if none are found.
       currentAppliedFont = null;
       currentAppliedDirection = null;
       currentAppliedFontSize = null;
@@ -394,14 +374,13 @@ function loadAndApplyInitialStyles() {
       currentAppliedLetterSpacing = null;
       currentAppliedWordSpacing = null;
     }
+  } catch (error) {
+    console.error("[FontChanger] Error loading initial styles:", error);
+  } finally {
     startObservingDOM();
-  });
+  }
 }
 
-/**
- * The callback for the MutationObserver. Re-applies all styles when the DOM changes.
- * UPDATED: Now re-applies spacing styles.
- */
 function handleMutations(mutationsList, obs) {
   clearTimeout(mutationDebounceTimeout);
   mutationDebounceTimeout = setTimeout(() => {
@@ -427,9 +406,6 @@ function handleMutations(mutationsList, obs) {
   }, 300);
 }
 
-/**
- * Initializes and starts the MutationObserver to watch for DOM changes.
- */
 function startObservingDOM() {
   if (observer) observer.disconnect();
   observer = new MutationObserver(handleMutations);
@@ -440,8 +416,4 @@ function startObservingDOM() {
 }
 
 // --- Script Execution ---
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", loadAndApplyInitialStyles);
-} else {
-  loadAndApplyInitialStyles();
-}
+loadAndApplyInitialStyles();

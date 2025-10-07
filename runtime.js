@@ -12,10 +12,8 @@
  * This is the primary hub for direct communication between scripts.
  */
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // Handle when the user changes the theme from the popup.
   if (message.type === "USER_CHANGED_THEME_PREFERENCE") {
     const newTheme = message.theme;
-    // Broadcast a generic "THEME_CHANGED" message to all parts of the extension.
     browser.runtime
       .sendMessage({ type: "THEME_CHANGED", theme: newTheme })
       .catch((e) =>
@@ -24,15 +22,10 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
           e.message
         )
       );
-    // Return true to indicate that we will send a response asynchronously,
-    // although in this case we are not. It's good practice.
     return true;
   }
 
-  // Handle when site-specific data has been changed (e.g., in the popup).
   if (message.type === "SITE_DATA_DID_CHANGE") {
-    // Forward this message to other views, particularly the settings page,
-    // so it can refresh its list of configured sites.
     browser.runtime
       .sendMessage({ type: "SITE_DATA_DID_CHANGE_FORWARDED" })
       .catch((e) =>
@@ -44,45 +37,31 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
-  // This message type would be used after a successful settings import.
   if (message.type === "SETTINGS_IMPORTED_SUCCESSFULLY") {
-    // Send a message to the popup, telling it to reload its settings.
     browser.runtime
       .sendMessage({ type: "RELOAD_POPUP_SETTINGS" })
       .catch((e) =>
         console.warn("Error telling popup to reload after import:", e.message)
       );
-
-    // Note: Active tabs will automatically re-apply styles because their
-    // content scripts are listening to the `browser.storage.onChanged` event.
-    // Explicitly messaging them is often not necessary unless an immediate,
-    // forced refresh is desired. The onChanged listener is more robust.
     sendResponse({
       status: "Import notification processed by service worker.",
     });
     return true;
   }
 
-  // Return false if the message was not handled by this listener.
   return false;
 });
 
 /**
  * Listens for any changes made to browser.storage.
- * This is the most reliable way to detect data changes, as it captures updates
- * from the popup, the settings page, and even from other devices via sync.
+ * This is the most reliable way to detect data changes.
  */
 browser.storage.onChanged.addListener((changes, areaName) => {
-  // We only care about the 'sync' storage area.
   if (areaName === "sync") {
     let siteDataWasAltered = false;
-
-    // Iterate over all the keys that were changed.
     for (const key in changes) {
-      // Check for theme changes.
       if (key === "theme") {
         if (changes[key].newValue !== changes[key].oldValue) {
-          // If the theme value actually changed, broadcast the change.
           browser.runtime
             .sendMessage({
               type: "THEME_CHANGED",
@@ -95,13 +74,8 @@ browser.storage.onChanged.addListener((changes, areaName) => {
               )
             );
         }
-      }
-      // Identify site-specific settings. A simple way is to check if the key contains a dot.
-      // This also excludes the backup key.
-      else if (key.includes(".") && key !== "fontChangerAllSettingsBackup") {
+      } else if (key.includes(".") && key !== "fontChangerAllSettingsBackup") {
         const change = changes[key];
-        // A change is considered an alteration if a new site object is added,
-        // or an old one is removed (newValue is undefined).
         if (
           (change.newValue && typeof change.newValue === "object") ||
           (change.oldValue && typeof change.newValue === "undefined")
@@ -111,8 +85,6 @@ browser.storage.onChanged.addListener((changes, areaName) => {
       }
     }
 
-    // If any site-specific data was added, removed, or changed,
-    // send a single message to notify relevant parts of the extension.
     if (siteDataWasAltered) {
       browser.runtime
         .sendMessage({ type: "SITE_DATA_DID_CHANGE" })
@@ -122,6 +94,54 @@ browser.storage.onChanged.addListener((changes, areaName) => {
             error.message
           );
         });
+    }
+  }
+});
+
+/**
+ * [ADDED] Ensures styles are applied when a tab finishes loading.
+ * This is a robust fallback mechanism to fix the initial load problem.
+ */
+browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (
+    changeInfo.status === "complete" &&
+    tab.url &&
+    (tab.url.startsWith("http") || tab.url.startsWith("file"))
+  ) {
+    try {
+      const hostname = new URL(tab.url).hostname;
+      const data = await browser.storage.sync.get(hostname);
+      const settings = data[hostname];
+
+      if (settings) {
+        // Send a message to the content script in the updated tab to apply styles.
+        // We wrap this in a try-catch because the content script might not be ready
+        // on certain pages (e.g., browser's internal pages), which would throw an error.
+        try {
+          await browser.tabs.sendMessage(tabId, {
+            action: "applyStyles",
+            font: settings.font,
+            direction: settings.direction,
+            fontSize: settings.fontSize,
+            lineHeight: settings.lineHeight,
+            fontWeight: settings.fontWeight,
+            letterSpacing: settings.letterSpacing,
+            wordSpacing: settings.wordSpacing,
+          });
+        } catch (error) {
+          // This error is often expected on pages where content scripts can't run.
+          if (!error.message.includes("Could not establish connection")) {
+            console.warn(
+              `[Service Worker] Could not apply styles to tab ${tabId}: ${error.message}`
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error(
+        "[Service Worker] Error in tabs.onUpdated listener:",
+        error
+      );
     }
   }
 });
