@@ -12,8 +12,11 @@
 
 A modern, lightweight browser extension that lets you easily and persistently change the font, size, line height, and text direction of any website. Designed with the "Less, but better" philosophy.
 
-Settings Page
+
 <img width="1919" height="914" alt="image" src="https://github.com/user-attachments/assets/af75afd0-f821-4c5e-8fbc-c4d5c30b11fa" />
+<div align="center">
+ Settings Page
+</div>
 
 ## ✨ Key Features
 
