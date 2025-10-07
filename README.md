@@ -15,8 +15,6 @@ A modern, lightweight browser extension that lets you easily and persistently ch
 Settings Page
 <img width="1919" height="914" alt="image" src="https://github.com/user-attachments/assets/af75afd0-f821-4c5e-8fbc-c4d5c30b11fa" />
 
----
-
 ## ✨ Key Features
 
 - **Framework-Free:** Written in pure Vanilla JS for maximum speed and efficiency.
