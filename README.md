@@ -7,7 +7,7 @@
 # Font & Direction Changer Extension
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-1.1-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Version-1.2-brightgreen.svg)]()
 [![Languages](https://img.shields.io/badge/Languages-FA%20%7C%20EN%20%7C%20AR-orange.svg)]()
 
 A modern, lightweight browser extension that lets you easily and persistently change the font, size, line height, and text direction of any website. Designed with the "Less, but better" philosophy.
