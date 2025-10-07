@@ -21,22 +21,33 @@ let currentAppliedWordSpacing = null;
 let observer = null;
 let mutationDebounceTimeout = null;
 
-// ... (The unchanged functions `loadGoogleFont` and `getAllShadowRoots` go here) ...
+/**
+ * [MODIFIED] Removes the old font link and creates a new one.
+ * This is a more robust method than just updating the href, ensuring
+ * the new font is fetched and applied immediately without a page refresh.
+ */
 function loadGoogleFont(fontName, fontWeight) {
-  const existingLink = document.getElementById(FONT_LINK_TAG_ID);
   const head = document.head || document.documentElement;
   const hostname = window.location.hostname;
+
+  // 1. Always remove the existing font link tag to ensure a clean slate.
+  const existingLink = document.getElementById(FONT_LINK_TAG_ID);
+  if (existingLink) {
+    existingLink.remove();
+  }
+
+  // 2. If no font is selected or it's a system font, we are done.
   if (!fontName) {
-    if (existingLink) existingLink.remove();
     sessionStore.remove(hostname);
     return;
   }
   const systemFonts = ["Tahoma", "Arial", "Times New Roman", "Georgia"];
   if (systemFonts.includes(fontName)) {
-    if (existingLink) existingLink.remove();
     sessionStore.remove(hostname);
     return;
   }
+
+  // 3. Build the new Google Fonts URL.
   let urlFontName = fontName.replace(/ /g, "+");
   let googleFontUrl = `https://fonts.googleapis.com/css2?family=${urlFontName}`;
   let weightParam = "";
@@ -66,31 +77,29 @@ function loadGoogleFont(fontName, fontWeight) {
   }
   if (weightParam) googleFontUrl += weightParam;
   googleFontUrl += (googleFontUrl.includes("?") ? "&" : "?") + "display=swap";
-  const updateLink = (link) => {
-    link.href = googleFontUrl;
-    link.onload = () => {
-      sessionStore.remove(hostname);
-    };
-    link.onerror = () => {
-      console.warn(
-        `[FontChanger] Font loading blocked by site policy (CSP) or network error: ${fontName}`
-      );
-      sessionStore.set({ [hostname]: { cspBlocked: true } });
-    };
+
+  // 4. Create and append the new link tag.
+  const linkElement = document.createElement("link");
+  linkElement.id = FONT_LINK_TAG_ID;
+  linkElement.rel = "stylesheet";
+  linkElement.type = "text/css";
+  linkElement.href = googleFontUrl;
+
+  linkElement.onload = () => {
+    // Font loaded successfully, clear any CSP warning flags.
+    sessionStore.remove(hostname);
   };
-  if (existingLink) {
-    if (existingLink.getAttribute("href") !== googleFontUrl) {
-      updateLink(existingLink);
-    }
-  } else {
-    const linkElement = document.createElement("link");
-    linkElement.id = FONT_LINK_TAG_ID;
-    linkElement.rel = "stylesheet";
-    linkElement.type = "text/css";
-    head.appendChild(linkElement);
-    updateLink(linkElement);
-  }
+  linkElement.onerror = () => {
+    // Font loading failed, likely due to CSP.
+    console.warn(
+      `[FontChanger] Font loading blocked by site policy (CSP) or network error: ${fontName}`
+    );
+    sessionStore.set({ [hostname]: { cspBlocked: true } });
+  };
+
+  head.appendChild(linkElement);
 }
+
 function getAllShadowRoots(element = document.documentElement) {
   const roots = new Set();
   const elementsToProcess = [element];
@@ -336,10 +345,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return false;
 });
 
-/**
- * [MODIFIED] Loads and applies styles saved for the current site when the page loads.
- * Converted to async/await for reliability.
- */
 async function loadAndApplyInitialStyles() {
   try {
     const data = await storageArea.get(null);
