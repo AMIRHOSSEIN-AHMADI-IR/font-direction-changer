@@ -9,15 +9,15 @@
 # إضافة تغيير الخط والاتجاه
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-1.1-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Version-1.2-brightgreen.svg)]()
 [![Languages](https://img.shields.io/badge/Languages-FA%20%7C%20EN%20%7C%20AR-orange.svg)]()
 
 إضافة متصفح حديثة وخفيفة الوزن تتيح لك تغيير الخط وحجمه وارتفاع السطر واتجاه النص لأي موقع ويب بسهولة وبشكل دائم. مصممة وفقًا لفلسفة "الأقل، ولكن الأفضل".
 
-صفحة الإعدادات
 <img width="1919" height="909" alt="image" src="https://github.com/user-attachments/assets/f3d79a4f-8c67-4a22-9ab1-66b637f6c436" />
-
----
+<div align="center">
+صفحة الإعدادات
+</div>
 
 ## ✨ الميزات الرئيسية
 

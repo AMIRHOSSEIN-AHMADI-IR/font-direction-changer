@@ -7,15 +7,15 @@
 # افزونه تغییر فونت و جهت متن
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-1.1-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Version-1.2-brightgreen.svg)]()
 [![Languages](https://img.shields.io/badge/Languages-FA%20%7C%20EN%20%7C%20AR-orange.svg)]()
 
 یک افزونه مدرن و سبک برای مرورگر که به شما اجازه می‌دهد فونت، اندازه، فاصله خطوط و جهت متن هر وب‌سایتی را به سادگی و به صورت پایدار تغییر دهید. طراحی شده بر اساس فلسفه «کمتر، اما بهتر».
 
-صفحه تنظیمات
 <img width="1919" height="914" alt="image" src="https://github.com/user-attachments/assets/e1379bb4-d55b-4f26-b078-84f8b7759aae" />
-
----
+<div align="center">
+  صفحه تنظیمات
+</div>
 
 ## ✨ ویژگی‌های کلیدی
 
